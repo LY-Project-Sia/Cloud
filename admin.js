@@ -1,0 +1,13 @@
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+async function load(){const s=await fetch("/api/dashboard").then(r=>r.json());$("#stats").innerHTML=[["Bookings",s.bookings],["Pending",s.pending],["New inquiries",s.inquiries],["Today",s.today]].map(x=>`<div class="stat"><div>${x[0]}</div><b>${x[1]}</b></div>`).join("");
+const b=await fetch("/api/bookings").then(r=>r.json());$("#bookingTable").innerHTML=`<table class="table"><tr><th>Customer</th><th>Venue</th><th>Date</th><th>Time</th><th>Amount</th><th>Status</th></tr>${b.map(x=>`<tr><td>${x.customer_name}<br><small>${x.email}</small></td><td>${x.venue}</td><td>${x.booking_date}</td><td>${x.start_time}-${x.end_time}</td><td>PHP ${x.amount}</td><td><select onchange="status(${x.id},this.value)">${["pending","confirmed","paid","cancelled","completed"].map(v=>`<option ${v===x.status?"selected":""}>${v}</option>`).join("")}</select></td></tr>`).join("")}</table>`;
+const i=await fetch("/api/inquiries").then(r=>r.json());$("#inquiryTable").innerHTML=`<table class="table"><tr><th>Name</th><th>Contact</th><th>Message</th><th>Status</th></tr>${i.map(x=>`<tr><td>${x.name}</td><td>${x.email}<br>${x.phone||""}</td><td>${x.message}</td><td>${x.status}</td></tr>`).join("")}</table>`;
+const ev=await fetch("/api/events").then(r=>r.json());$("#eventTable").innerHTML=ev.map(x=>`<div class="panel"><b>${x.title}</b> — ${x.date} ${x.time||""}<button onclick="delEvent(${x.id})">Delete</button><p>${x.description||""}</p></div>`).join("");
+const settings=await fetch("/api/settings").then(r=>r.json());$("#settingsForm").innerHTML=Object.entries(settings).map(([k,v])=>`<label>${k}<input name="${k}" value="${v}"></label>`).join("")+`<button class="btn primary">Save settings</button>`;
+$("#settingsForm").onsubmit=async e=>{e.preventDefault();await fetch("/api/settings",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(e.target)))});alert("Saved");};
+}
+window.status=async(id,status)=>{await fetch("/api/bookings/"+id,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status})});load()};
+window.delEvent=async id=>{await fetch("/api/events/"+id,{method:"DELETE"});load()};
+$("#eventForm").onsubmit=async e=>{e.preventDefault();await fetch("/api/events",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(e.target)))});e.target.reset();load()};
+$$(".tabs button").forEach(b=>b.onclick=()=>{$$(".admin-section").forEach(s=>s.classList.add("hidden"));$("#"+b.dataset.tab).classList.remove("hidden")});
+load();

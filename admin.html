@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin | Astra</title><link rel="stylesheet" href="/styles.css"></head>
+<body class="admin"><header class="adminbar"><b>ASTRA ADMIN</b><a href="/">View site</a></header>
+<main class="admin-wrap"><div class="stats" id="stats"></div>
+<div class="tabs"><button data-tab="bookings">Bookings</button><button data-tab="inquiries">Inquiries</button><button data-tab="events">Events</button><button data-tab="settings">Settings</button></div>
+<section id="bookings" class="admin-section"><h2>Bookings</h2><div id="bookingTable"></div></section>
+<section id="inquiries" class="admin-section hidden"><h2>Inquiries</h2><div id="inquiryTable"></div></section>
+<section id="events" class="admin-section hidden"><h2>Events</h2><form id="eventForm" class="form inline"><input name="title" placeholder="Event title" required><input name="date" type="date" required><input name="time" placeholder="6:00 PM – 9:00 PM"><input name="description" placeholder="Description"><button class="btn primary">Add event</button></form><div id="eventTable"></div></section>
+<section id="settings" class="admin-section hidden"><h2>Site settings</h2><form id="settingsForm" class="form"></form></section>
+</main><script src="/admin.js"></script></body></html>

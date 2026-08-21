@@ -1,0 +1,9 @@
+const courts=[1,2,3,4,5,6,7,8];let selectedCourt=null,selectedTime=null;
+const date=document.getElementById("date");date.value=new Date().toISOString().slice(0,10);date.min=date.value;
+document.getElementById("courts").innerHTML=courts.map(c=>`<button data-court="${c}">COURT ${c}</button>`).join("");
+document.querySelectorAll("#courts button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#courts button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");selectedCourt=b.dataset.court;document.getElementById("venue").value=`Court ${selectedCourt}`;});
+const times=[];for(let h=8;h<23;h++)times.push(`${String(h).padStart(2,"0")}:00`);
+document.getElementById("times").innerHTML=times.map(t=>`<button data-time="${t}">${t} – ${String(Number(t.slice(0,2))+1).padStart(2,"0")}:00</button>`).join("");
+document.querySelectorAll("#times button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#times button").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");selectedTime=b.dataset.time;document.getElementById("start_time").value=selectedTime;document.getElementById("end_time").value=`${String(Number(selectedTime.slice(0,2))+1).padStart(2,"0")}:00`;});
+date.onchange=()=>document.getElementById("booking_date").value=date.value;document.getElementById("booking_date").value=date.value;
+document.getElementById("bookingForm").onsubmit=async e=>{e.preventDefault();if(!selectedCourt||!selectedTime)return alert("Choose a court and time.");const body=Object.fromEntries(new FormData(e.target));const r=await fetch("/api/bookings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});document.getElementById("bookingMsg").textContent=r.ok?"Booking request received. Admin will confirm it shortly.":"Could not submit booking.";};
