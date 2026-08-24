@@ -1,4 +1,0 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Events | Astra</title><link rel="stylesheet" href="/styles.css"></head>
-<body><header class="nav"><a class="brand" href="/">ASTRA<span>+</span></a><nav><a href="/">Home</a><a href="/booking.html">Book</a><a href="/admin.html">Admin</a></nav></header><main class="page"><p class="eyebrow">EVENTS</p><h1>Play. Compete. Connect.</h1><div id="events" class="event-grid"></div></main><script>
-fetch("/api/events").then(r=>r.json()).then(rows=>{document.getElementById("events").innerHTML=rows.length?rows.map(x=>`<article class="panel"><p class="eyebrow">${x.date} ${x.time||""}</p><h2>${x.title}</h2><p>${x.description||""}</p></article>`).join(""):"<p>No published events yet.</p>"});
-</script></body></html>
